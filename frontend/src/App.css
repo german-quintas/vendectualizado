@@ -1,0 +1,207 @@
+/* App.css */
+
+
+/* Estilo Global */
+.App {
+  text-align: center;
+}
+
+/* Estilo de la imagen o logo si tienes */
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+/* Animación de logo si tienes */
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+/* Cabecera Principal */
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+/* Enlace */
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Estilo para el contenedor principal */
+div {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background-color: #f4f4f4;
+}
+
+/* Título principal */
+h1 {
+  color: #2c3e50;
+  text-align: center;
+  font-size: 36px;
+  font-weight: bold;
+}
+
+/* Formulario y márgenes */
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+input[type="number"], input[type="text"] {
+  padding: 8px;
+  margin-top: 5px;
+  width: 100%;
+  max-width: 300px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+/* Botón */
+button {
+  padding: 10px 15px;
+  background-color: #3498db; /* Color azul */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+/* Estilos para la tabla */
+table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #3498db;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Buscador */
+input[type="text"] {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  max-width: 300px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+/* Slider de Productos */
+.slick-slider {
+  max-width: 100%; /* Asegura que el slider ocupe el 100% del contenedor */
+  margin: 0 auto;  /* Centra el slider en el contenedor */
+}
+
+.slick-list {
+  overflow: hidden; /* Oculta cualquier contenido que sobresalga fuera del contenedor */
+}
+
+.slick-track {
+  display: flex; /* Usa flexbox para organizar los elementos */
+}
+
+.slick-slide {
+  display: flex;
+  justify-content: center; /* Centra el contenido dentro de cada slide */
+  align-items: center; /* Alinea verticalmente los productos */
+}
+
+/* Flechas del slider */
+.slick-prev, .slick-next {
+  background-color: transparent; /* Fondo transparente */
+  border-radius: 50%;
+  font-size: 18px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: transparent; /* Color transparente para ocultar las flechas */
+}
+
+.slick-prev:hover, .slick-next:hover {
+  background-color: transparent; /* Fondo transparente en hover */
+  color: transparent; /* Mantener transparente las flechas */
+}
+
+/* Eliminar texto de las flechas */
+.slick-prev:before, .slick-next:before {
+  content: ''; /* Eliminar los íconos de las flechas */
+}
+
+/* Tarjeta de Producto */
+.producto-card {
+  text-align: center;
+  background-color: #fff;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 250px;
+  margin: 0 10px;
+  transition: transform 0.3s ease;
+}
+
+.producto-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.producto-card h2 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.producto-card p {
+  font-size: 32px;
+  font-weight: bold;
+  color: #e74c3c;
+  margin-top: 5px;
+}
+
+/* Opcionales: Ajustes para los puntos de navegación */
+.slick-dots {
+  bottom: -30px; /* Mueve los puntos de navegación un poco más abajo */
+}
+
+.slick-dots li button:before {
+  color: #3498db; /* Color de los puntos de navegación */
+}
