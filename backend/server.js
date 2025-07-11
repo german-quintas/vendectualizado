@@ -8,12 +8,21 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Configuración de la conexión a la base de datos
-const pool = new Pool({
+/*const pool = new Pool({
     user: 'postgres',
     host: 'localhost',
     database: 'gestion_productos',
     password: '1234', // Cambia por tu contraseña
     port: 5432,
+});*/
+
+const { Pool } = require('pg');
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 // Endpoint básico para verificar el servidor
