@@ -16,8 +16,6 @@ app.use(cors());
     port: 5432,
 });*/
 
-const { Pool } = require('pg');
-
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
