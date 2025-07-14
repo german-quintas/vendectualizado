@@ -10,7 +10,7 @@ function Productos() {
         nombreProducto: '',
         tipoProducto: '',
         descripcionProducto: '',
-        precioVentaProducto: 0,
+        precioVentaProducto: 1,
         directivaCostoFijoProducto: 0,
         directivaCostoVariableProducto: 0,
         directivaGananciaProducto: 0,
@@ -47,31 +47,71 @@ function Productos() {
         setNewProducto({ ...newProducto, [name]: value });
     };
 
+
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            if (editMode) {
-                await updateProducto(editId, newProducto);
-                setEditMode(false);
-                setEditId(null);
-            } else {
-                await createProducto(newProducto);
-            }
-            fetchProductos();
-            setNewProducto({
-                codProducto: '',
-                nombreProducto: '',
-                tipoProducto: '',
-                descripcionProducto: '',
-                precioVentaProducto: 0,
-                directivaCostoFijoProducto: 0,
-                directivaCostoVariableProducto: 0,
-                directivaGananciaProducto: 0,
+    e.preventDefault();
+    try {
+                console.log("📦 Enviando a backend:", newProducto); // ✅ Solo se ejecuta cuando se envía el form
+
+        if (editMode) {
+            await updateProducto(editId, {
+                codproducto: newProducto.codProducto,
+    nombreproducto: newProducto.nombreProducto,
+    tipoproducto: newProducto.tipoProducto,
+    descripcionproducto: newProducto.descripcionProducto,
+    precioventaproducto: Number(newProducto.precioVentaProducto) || 1,
+    directivacostofijoproducto: Number(newProducto.directivaCostoFijoProducto),
+    directivacostovariableproducto: Number(newProducto.directivaCostoVariableProducto),
+    directivagananciaproducto: Number(newProducto.directivaGananciaProducto),
             });
-        } catch (error) {
-            console.error('Error saving producto:', error);
+            setEditMode(false);
+            setEditId(null);
+        } else {
+            console.log("📦 Enviando a backend:", newProducto);
+
+            const payload = {
+  codproducto: newProducto.codProducto,
+  nombreproducto: newProducto.nombreProducto,
+  tipoproducto: newProducto.tipoProducto,
+  descripcionproducto: newProducto.descripcionProducto,
+  precioventaproducto: Number(newProducto.precioVentaProducto) || 1,
+  directivacostofijoproducto: Number(newProducto.directivaCostoFijoProducto),
+  directivacostovariableproducto: Number(newProducto.directivaCostoVariableProducto),
+  directivagananciaproducto: Number(newProducto.directivaGananciaProducto),
+};
+
+console.log("✅ Payload que se envía al backend:", payload);
+await createProducto(payload);
+
+            await createProducto({
+                    codproducto: newProducto.codProducto,
+    nombreproducto: newProducto.nombreProducto,
+    tipoproducto: newProducto.tipoProducto,
+    descripcionproducto: newProducto.descripcionProducto,
+    precioventaproducto: Number(newProducto.precioVentaProducto) || 1,
+    directivacostofijoproducto: Number(newProducto.directivaCostoFijoProducto),
+    directivacostovariableproducto: Number(newProducto.directivaCostoVariableProducto),
+    directivagananciaproducto: Number(newProducto.directivaGananciaProducto),
+            });
         }
-    };
+
+        fetchProductos();
+        setNewProducto({
+            codProducto: '',
+            nombreProducto: '',
+            tipoProducto: '',
+            descripcionProducto: '',
+            precioVentaProducto: 1,
+            directivaCostoFijoProducto: 0,
+            directivaCostoVariableProducto: 0,
+            directivaGananciaProducto: 0,
+        });
+    } catch (error) {
+        console.error('Error saving producto:', error);
+    }
+};
+
+
 
     const handleEdit = (producto) => {
         setEditMode(true);

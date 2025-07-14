@@ -21,7 +21,7 @@ const CalcularPrecio = () => {
 
     try {
       // Hacer la solicitud GET al backend con los márgenes ingresados por el usuario
-      const response = await fetch(`http://localhost:3001/api/calcular-precios?margenGanancia=${margenGanancia || ''}&margenCosto=${margenCosto || ''}`);
+const response = await fetch(`${process.env.REACT_APP_API_URL}/api/calcular-precios?margenGanancia=${margenGanancia || ''}&margenCosto=${margenCosto || ''}`);
 
       // Verificar que la respuesta sea válida
       if (!response.ok) {
@@ -52,7 +52,7 @@ const CalcularPrecio = () => {
 
       try {
         // Hacer la solicitud GET al backend sin parámetros para obtener los productos inicialmente
-        const response = await fetch('http://localhost:3001/api/calcular-precios');
+const response = await fetch(`${process.env.REACT_APP_API_URL}/api/calcular-precios`);
 
         if (!response.ok) {
           throw new Error('Hubo un error al obtener los productos');

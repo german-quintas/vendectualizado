@@ -10,7 +10,8 @@ const Relaciones = () => {
 
     // Buscar productos
     useEffect(() => {
-        fetch('http://localhost:3001/productos')
+        fetch(`${process.env.REACT_APP_API_URL}/productos`)
+
             .then((response) => response.json())
             .then((data) => {
                 setProductos(data);
@@ -21,7 +22,7 @@ const Relaciones = () => {
 
     // Buscar materias primas
     useEffect(() => {
-        fetch('http://localhost:3001/materias-primas')
+        fetch(`${process.env.REACT_APP_API_URL}/materias-primas`)
             .then((response) => response.json())
             .then((data) => setMateriasPrimas(data))
             .catch((error) => console.error('Error al cargar materias primas:', error));
@@ -50,7 +51,7 @@ const Relaciones = () => {
             }));
     
         try {
-            const response = await fetch(`http://localhost:3001/productos/${productoSeleccionado.idproducto}/materias-primas`, {
+const response = await fetch(`${process.env.REACT_APP_API_URL}/productos/${productoSeleccionado.idproducto}/materias-primas`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ relaciones }),
@@ -74,7 +75,7 @@ const seleccionarProducto = async (producto) => {
     setProductoSeleccionado(producto);
 
     try {
-        const response = await fetch(`http://localhost:3001/productos/${producto.idproducto}/materias-primas`);
+const response = await fetch(`${process.env.REACT_APP_API_URL}/productos/${producto.idproducto}/materias-primas`);
         const relaciones = await response.json();
 
         setMateriasPrimas((prev) =>

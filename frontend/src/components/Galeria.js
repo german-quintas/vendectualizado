@@ -9,7 +9,7 @@ function Galeria() {
 
   const fetchProductos = async () => {
     try {
-      const response = await fetch("http://localhost:3001/productos");
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/productos`);
       if (!response.ok) {
         throw new Error("Error al obtener los productos");
       }

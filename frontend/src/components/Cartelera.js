@@ -17,7 +17,7 @@ const CalcularPrecio = () => {
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:3001/api/calcular-precios?margenGanancia=${margenGanancia || ''}&margenCosto=${margenCosto || ''}`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/calcular-precios?margenGanancia=${margenGanancia || ''}&margenCosto=${margenCosto || ''}`);
       if (!response.ok) {
         throw new Error('Hubo un error al obtener los precios');
       }
@@ -42,7 +42,7 @@ const CalcularPrecio = () => {
       setError(null);
 
       try {
-        const response = await fetch('http://localhost:3001/api/calcular-precios');
+const response = await fetch(`${process.env.REACT_APP_API_URL}/api/calcular-precios`);
         if (!response.ok) {
           throw new Error('Hubo un error al obtener los productos');
         }

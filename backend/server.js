@@ -209,7 +209,15 @@ app.get('/productos', async (req, res) => {
 app.post('/productos', async (req, res) => {
     const { codProducto, nombreProducto, tipoProducto, descripcionProducto, precioVentaProducto, directivaCostoFijoProducto, directivaCostoVariableProducto, directivaGananciaProducto } = req.body;
 
-    if (!codProducto || !nombreProducto || !tipoProducto || !precioVentaProducto || !directivaCostoFijoProducto || !directivaCostoVariableProducto || !directivaGananciaProducto) {
+   if (
+        !codProducto ||
+        !nombreProducto ||
+        !tipoProducto ||
+        !precioVentaProducto ||
+        !directivaCostoFijoProducto ||
+        !directivaCostoVariableProducto ||
+        !directivaGananciaProducto
+    ) {
         return res.status(400).json({ error: 'Faltan campos obligatorios' });
     }
 

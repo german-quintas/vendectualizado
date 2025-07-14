@@ -1,6 +1,7 @@
 import axios from 'axios';
+const API_BASE_URL = process.env.REACT_APP_API_URL;
+console.log("🌐 API_BASE_URL:", API_BASE_URL);
 
-const API_BASE_URL = 'http://localhost:3001';
 
 // Materias Primas
 export const getMateriasPrimas = () => axios.get(`${API_BASE_URL}/materias-primas`);
