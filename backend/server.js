@@ -207,32 +207,64 @@ app.get('/productos', async (req, res) => {
 
 // Crear un nuevo producto
 app.post('/productos', async (req, res) => {
-    const { codProducto, nombreProducto, tipoProducto, descripcionProducto, precioVentaProducto, directivaCostoFijoProducto, directivaCostoVariableProducto, directivaGananciaProducto } = req.body;
-  console.log("📥 Producto recibido:", req.body); // <- AGREGÁ ESTO
-   if (
-        !codProducto ||
-        !nombreProducto ||
-        !tipoProducto ||
-        !precioVentaProducto ||
-        !directivaCostoFijoProducto ||
-        !directivaCostoVariableProducto ||
-        !directivaGananciaProducto
-    ) {
-        return res.status(400).json({ error: 'Faltan campos obligatorios' });
-    }
+  const {
+    codproducto,
+    nombreproducto,
+    tipoproducto,
+    descripcionproducto,
+    precioventaproducto,
+    directivacostofijoproducto,
+    directivacostovariableproducto,
+    directivagananciaproducto
+  } = req.body;
 
-    try {
-        const query = `
-            INSERT INTO producto (codProducto, nombreProducto, tipoProducto, descripcionProducto, precioVentaProducto, directivaCostoFijoProducto, directivaCostoVariableProducto, directivaGananciaProducto)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
-        const values = [codProducto, nombreProducto, tipoProducto, descripcionProducto, precioVentaProducto, directivaCostoFijoProducto, directivaCostoVariableProducto, directivaGananciaProducto];
-        const result = await pool.query(query, values);
-        res.json(result.rows[0]);
-    } catch (error) {
-        console.error('Error al crear producto:', error);
-        res.status(500).json({ error: 'Error al crear producto' });
-    }
+  console.log("📥 Producto recibido:", req.body);
+
+  // ✅ Validación con los mismos nombres que vienen del frontend
+  if (
+    !codproducto ||
+    !nombreproducto ||
+    !tipoproducto ||
+    precioventaproducto == null ||
+    directivacostofijoproducto == null ||
+    directivacostovariableproducto == null ||
+    directivagananciaproducto == null
+  ) {
+    return res.status(400).json({ error: 'Faltan campos obligatorios' });
+  }
+
+  try {
+    const query = `
+      INSERT INTO producto (
+        codProducto,
+        nombreProducto,
+        tipoProducto,
+        descripcionProducto,
+        precioVentaProducto,
+        directivaCostoFijoProducto,
+        directivaCostoVariableProducto,
+        directivaGananciaProducto
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
+
+    const values = [
+      codproducto,
+      nombreproducto,
+      tipoproducto,
+      descripcionproducto,
+      precioventaproducto,
+      directivacostofijoproducto,
+      directivacostovariableproducto,
+      directivagananciaproducto
+    ];
+
+    const result = await pool.query(query, values);
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('Error al crear producto:', error);
+    res.status(500).json({ error: 'Error al crear producto' });
+  }
 });
+
 
 
 // Vincular producto con materias primas
