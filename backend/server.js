@@ -208,7 +208,7 @@ app.get('/productos', async (req, res) => {
 // Crear un nuevo producto
 app.post('/productos', async (req, res) => {
     const { codProducto, nombreProducto, tipoProducto, descripcionProducto, precioVentaProducto, directivaCostoFijoProducto, directivaCostoVariableProducto, directivaGananciaProducto } = req.body;
-
+  console.log("📥 Producto recibido:", req.body); // <- AGREGÁ ESTO
    if (
         !codProducto ||
         !nombreProducto ||
