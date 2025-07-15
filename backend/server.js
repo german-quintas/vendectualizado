@@ -362,16 +362,18 @@ app.delete('/materias-primas/:id', async (req, res) => {
 // Actualizar un producto
 app.put('/productos/:id', async (req, res) => {
   const { id } = req.params;
+
+  // Usamos los mismos nombres que el frontend envía (todo en minúsculas)
   const {
-    codProducto,
-    nombreProducto,
-    tipoProducto,
-    descripcionProducto,
-    precioVentaProducto,
-    directivaCostoFijoProducto,
-    directivaCostoVariableProducto,
-    directivaGananciaProducto,
-    imagenProducto // ✅ NUEVO CAMPO
+    codproducto,
+    nombreproducto,
+    tipoproducto,
+    descripcionproducto,
+    precioventaproducto,
+    directivacostofijoproducto,
+    directivacostovariableproducto,
+    directivagananciaproducto,
+    imagenproducto // ✅ este viene desde Cloudinary
   } = req.body;
 
   try {
@@ -392,15 +394,15 @@ app.put('/productos/:id', async (req, res) => {
     `;
 
     const values = [
-      codProducto,
-      nombreProducto,
-      tipoProducto,
-      descripcionProducto,
-      precioVentaProducto,
-      directivaCostoFijoProducto,
-      directivaCostoVariableProducto,
-      directivaGananciaProducto,
-      imagenProducto, // ✅ NUEVO VALOR
+      codproducto,
+      nombreproducto,
+      tipoproducto,
+      descripcionproducto,
+      precioventaproducto,
+      directivacostofijoproducto,
+      directivacostovariableproducto,
+      directivagananciaproducto,
+      imagenproducto,
       id
     ];
 
@@ -412,10 +414,11 @@ app.put('/productos/:id', async (req, res) => {
 
     res.json(result.rows[0]);
   } catch (error) {
-    console.error('Error actualizando producto:', error);
+    console.error('❌ Error actualizando producto:', error);
     res.status(500).json({ error: 'Error actualizando producto' });
   }
 });
+
 
 
 // Eliminar un producto
