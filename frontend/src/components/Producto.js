@@ -82,17 +82,6 @@ function Productos() {
 
 console.log("✅ Payload que se envía al backend:", payload);
 await createProducto(payload);
-
-            await createProducto({
-                    codproducto: newProducto.codProducto,
-    nombreproducto: newProducto.nombreProducto,
-    tipoproducto: newProducto.tipoProducto,
-    descripcionproducto: newProducto.descripcionProducto,
-    precioventaproducto: Number(newProducto.precioVentaProducto) || 1,
-    directivacostofijoproducto: Number(newProducto.directivaCostoFijoProducto),
-    directivacostovariableproducto: Number(newProducto.directivaCostoVariableProducto),
-    directivagananciaproducto: Number(newProducto.directivaGananciaProducto),
-            });
         }
 
         fetchProductos();
