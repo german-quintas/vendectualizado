@@ -359,24 +359,58 @@ app.delete('/materias-primas/:id', async (req, res) => {
 // Actualizar un producto
 app.put('/productos/:id', async (req, res) => {
     const { id } = req.params;
-    const { codProducto, nombreProducto, tipoProducto, descripcionProducto, precioVentaProducto, directivaCostoFijoProducto, directivaCostoVariableProducto, directivaGananciaProducto } = req.body;
+
+    // 👇 Adaptado a las claves en minúsculas que envía el frontend
+    const {
+        codproducto,
+        nombreproducto,
+        tipoproducto,
+        descripcionproducto,
+        precioventaproducto,
+        directivacostofijoproducto,
+        directivacostovariableproducto,
+        directivagananciaproducto
+    } = req.body;
 
     try {
         const query = `
             UPDATE producto
-            SET codProducto = $1, nombreProducto = $2, tipoProducto = $3, descripcionProducto = $4, precioVentaProducto = $5, directivaCostoFijoProducto = $6, directivaCostoVariableProducto = $7, directivaGananciaProducto = $8
-            WHERE idProducto = $9 RETURNING *`;
-        const values = [codProducto, nombreProducto, tipoProducto, descripcionProducto, precioVentaProducto, directivaCostoFijoProducto, directivaCostoVariableProducto, directivaGananciaProducto, id];
+            SET codProducto = $1,
+                nombreProducto = $2,
+                tipoProducto = $3,
+                descripcionProducto = $4,
+                precioVentaProducto = $5,
+                directivaCostoFijoProducto = $6,
+                directivaCostoVariableProducto = $7,
+                directivaGananciaProducto = $8
+            WHERE idProducto = $9
+            RETURNING *`;
+
+        const values = [
+            codproducto,
+            nombreproducto,
+            tipoproducto,
+            descripcionproducto,
+            precioventaproducto,
+            directivacostofijoproducto,
+            directivacostovariableproducto,
+            directivagananciaproducto,
+            id
+        ];
 
         const result = await pool.query(query, values);
+
         if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Producto no encontrado' });
         }
+
         res.json(result.rows[0]);
     } catch (error) {
+        console.error('❌ Error en PUT /productos/:id:', error.message);
         res.status(500).json({ error: error.message });
     }
 });
+
 
 // Eliminar un producto
 app.delete('/productos/:id', async (req, res) => {
