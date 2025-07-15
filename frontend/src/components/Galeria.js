@@ -122,11 +122,14 @@ function Galeria() {
       <Slider {...settings}>
         {productos.map((producto) => (
           <div key={producto.idproducto} style={productoEstilo}>
-            <img
-              src={`/images/${producto.imagenproducto}`}
-              alt={producto.nombreproducto}
-              style={imagenEstilo}
-            />
+            {producto.imagenproducto && (
+  <img
+    src={producto.imagenproducto}
+    alt={producto.nombreproducto}
+    style={imagenEstilo}
+  />
+)}
+
             <h3 style={nombreEstilo}>{producto.nombreproducto}</h3>
             <p style={descripcionEstilo}>{producto.descripcionproducto}</p>
             <p style={precioEstilo}>
