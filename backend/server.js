@@ -215,12 +215,13 @@ app.post('/productos', async (req, res) => {
     precioventaproducto,
     directivacostofijoproducto,
     directivacostovariableproducto,
-    directivagananciaproducto
+    directivagananciaproducto,
+    imagenproducto // ✅ NUEVO CAMPO
   } = req.body;
 
   console.log("📥 Producto recibido:", req.body);
 
-  // ✅ Validación con los mismos nombres que vienen del frontend
+  // ✅ Validación
   if (
     !codproducto ||
     !nombreproducto ||
@@ -243,8 +244,11 @@ app.post('/productos', async (req, res) => {
         precioVentaProducto,
         directivaCostoFijoProducto,
         directivaCostoVariableProducto,
-        directivaGananciaProducto
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
+        directivaGananciaProducto,
+        imagenProducto
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      RETURNING *;
+    `;
 
     const values = [
       codproducto,
@@ -254,7 +258,8 @@ app.post('/productos', async (req, res) => {
       precioventaproducto,
       directivacostofijoproducto,
       directivacostovariableproducto,
-      directivagananciaproducto
+      directivagananciaproducto,
+      imagenproducto // ✅ NUEVO VALOR
     ];
 
     const result = await pool.query(query, values);
@@ -264,8 +269,6 @@ app.post('/productos', async (req, res) => {
     res.status(500).json({ error: 'Error al crear producto' });
   }
 });
-
-
 
 // Vincular producto con materias primas
 
@@ -358,57 +361,60 @@ app.delete('/materias-primas/:id', async (req, res) => {
 
 // Actualizar un producto
 app.put('/productos/:id', async (req, res) => {
-    const { id } = req.params;
+  const { id } = req.params;
+  const {
+    codProducto,
+    nombreProducto,
+    tipoProducto,
+    descripcionProducto,
+    precioVentaProducto,
+    directivaCostoFijoProducto,
+    directivaCostoVariableProducto,
+    directivaGananciaProducto,
+    imagenProducto // ✅ NUEVO CAMPO
+  } = req.body;
 
-    // 👇 Adaptado a las claves en minúsculas que envía el frontend
-    const {
-        codproducto,
-        nombreproducto,
-        tipoproducto,
-        descripcionproducto,
-        precioventaproducto,
-        directivacostofijoproducto,
-        directivacostovariableproducto,
-        directivagananciaproducto
-    } = req.body;
+  try {
+    const query = `
+      UPDATE producto
+      SET 
+        codProducto = $1,
+        nombreProducto = $2,
+        tipoProducto = $3,
+        descripcionProducto = $4,
+        precioVentaProducto = $5,
+        directivaCostoFijoProducto = $6,
+        directivaCostoVariableProducto = $7,
+        directivaGananciaProducto = $8,
+        imagenProducto = $9
+      WHERE idProducto = $10
+      RETURNING *;
+    `;
 
-    try {
-        const query = `
-            UPDATE producto
-            SET codProducto = $1,
-                nombreProducto = $2,
-                tipoProducto = $3,
-                descripcionProducto = $4,
-                precioVentaProducto = $5,
-                directivaCostoFijoProducto = $6,
-                directivaCostoVariableProducto = $7,
-                directivaGananciaProducto = $8
-            WHERE idProducto = $9
-            RETURNING *`;
+    const values = [
+      codProducto,
+      nombreProducto,
+      tipoProducto,
+      descripcionProducto,
+      precioVentaProducto,
+      directivaCostoFijoProducto,
+      directivaCostoVariableProducto,
+      directivaGananciaProducto,
+      imagenProducto, // ✅ NUEVO VALOR
+      id
+    ];
 
-        const values = [
-            codproducto,
-            nombreproducto,
-            tipoproducto,
-            descripcionproducto,
-            precioventaproducto,
-            directivacostofijoproducto,
-            directivacostovariableproducto,
-            directivagananciaproducto,
-            id
-        ];
+    const result = await pool.query(query, values);
 
-        const result = await pool.query(query, values);
-
-        if (result.rows.length === 0) {
-            return res.status(404).json({ error: 'Producto no encontrado' });
-        }
-
-        res.json(result.rows[0]);
-    } catch (error) {
-        console.error('❌ Error en PUT /productos/:id:', error.message);
-        res.status(500).json({ error: error.message });
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Producto no encontrado' });
     }
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('Error actualizando producto:', error);
+    res.status(500).json({ error: 'Error actualizando producto' });
+  }
 });
 
 

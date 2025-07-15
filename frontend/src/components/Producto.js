@@ -2,6 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { getProductos, createProducto, updateProducto, deleteProducto } from '../services/api';
 import './MateriaPrima.css'; // Usamos los estilos de Materia Prima CSS
 
+const uploadImage = async (file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "productos_preset"); // preset creado en Cloudinary
+  formData.append("cloud_name", "dltzftuar"); // ⚠️ reemplazar por el tuyo
+
+  try {
+    const res = await fetch("https://api.cloudinary.com/v1_1/dltzftuar/image/upload", {
+      method: "POST",
+      body: formData,
+    });
+    const data = await res.json();
+    return data.secure_url;
+  } catch (error) {
+    console.error("❌ Error subiendo imagen a Cloudinary", error);
+    return null;
+  }
+};
+
 function Productos() {
     const [productos, setProductos] = useState([]);
     const [filteredProductos, setFilteredProductos] = useState([]);
@@ -49,73 +68,76 @@ function Productos() {
 
 
     const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-                console.log("📦 Enviando a backend:", newProducto); // ✅ Solo se ejecuta cuando se envía el form
+  e.preventDefault();
+  try {
+    console.log("📦 Enviando a backend:", newProducto);
 
-        if (editMode) {
-            await updateProducto(editId, {
-                codproducto: newProducto.codProducto,
-    nombreproducto: newProducto.nombreProducto,
-    tipoproducto: newProducto.tipoProducto,
-    descripcionproducto: newProducto.descripcionProducto,
-    precioventaproducto: Number(newProducto.precioVentaProducto) || 1,
-    directivacostofijoproducto: Number(newProducto.directivaCostoFijoProducto),
-    directivacostovariableproducto: Number(newProducto.directivaCostoVariableProducto),
-    directivagananciaproducto: Number(newProducto.directivaGananciaProducto),
-            });
-            setEditMode(false);
-            setEditId(null);
-        } else {
-            console.log("📦 Enviando a backend:", newProducto);
+    // ✅ Usar imagen anterior si no se sube una nueva
+    let imagenUrl = newProducto.imagenproducto || '';
 
-            const payload = {
-  codproducto: newProducto.codProducto,
-  nombreproducto: newProducto.nombreProducto,
-  tipoproducto: newProducto.tipoProducto,
-  descripcionproducto: newProducto.descripcionProducto,
-  precioventaproducto: Number(newProducto.precioVentaProducto) || 1,
-  directivacostofijoproducto: Number(newProducto.directivaCostoFijoProducto),
-  directivacostovariableproducto: Number(newProducto.directivaCostoVariableProducto),
-  directivagananciaproducto: Number(newProducto.directivaGananciaProducto),
-};
-
-console.log("✅ Payload que se envía al backend:", payload);
-await createProducto(payload);
-        }
-
-        fetchProductos();
-        setNewProducto({
-            codProducto: '',
-            nombreProducto: '',
-            tipoProducto: '',
-            descripcionProducto: '',
-            precioVentaProducto: 1,
-            directivaCostoFijoProducto: 0,
-            directivaCostoVariableProducto: 0,
-            directivaGananciaProducto: 0,
-        });
-    } catch (error) {
-        console.error('Error saving producto:', error);
+    // ✅ Subir imagen nueva si se cargó una
+    if (newProducto.imagenFile) {
+      imagenUrl = await uploadImage(newProducto.imagenFile);
     }
+
+    const payload = {
+      codproducto: newProducto.codProducto,
+      nombreproducto: newProducto.nombreProducto,
+      tipoproducto: newProducto.tipoProducto,
+      descripcionproducto: newProducto.descripcionProducto,
+      precioventaproducto: Number(newProducto.precioVentaProducto) || 1,
+      directivacostofijoproducto: Number(newProducto.directivaCostoFijoProducto),
+      directivacostovariableproducto: Number(newProducto.directivaCostoVariableProducto),
+      directivagananciaproducto: Number(newProducto.directivaGananciaProducto),
+      imagenproducto: imagenUrl,
+    };
+
+    if (editMode) {
+      await updateProducto(editId, payload);
+      setEditMode(false);
+      setEditId(null);
+    } else {
+      console.log("✅ Payload que se envía al backend:", payload);
+      await createProducto(payload);
+    }
+
+    await fetchProductos();
+    setNewProducto({
+      codProducto: '',
+      nombreProducto: '',
+      tipoProducto: '',
+      descripcionProducto: '',
+      precioVentaProducto: 1,
+      directivaCostoFijoProducto: 0,
+      directivaCostoVariableProducto: 0,
+      directivaGananciaProducto: 0,
+      imagenFile: null,
+      imagenproducto: '', // ← limpiar también la URL
+    });
+  } catch (error) {
+    console.error('Error saving producto:', error);
+  }
 };
 
 
 
     const handleEdit = (producto) => {
-        setEditMode(true);
-        setEditId(producto.idproducto);
-        setNewProducto({
-            codProducto: producto.codproducto,
-            nombreProducto: producto.nombreproducto,
-            tipoProducto: producto.tipoproducto,
-            descripcionProducto: producto.descripcionproducto,
-            precioVentaProducto: producto.precioventaproducto,
-            directivaCostoFijoProducto: producto.directivacostofijoproducto,
-            directivaCostoVariableProducto: producto.directivacostovariableproducto,
-            directivaGananciaProducto: producto.directivagananciaproducto,
-        });
-    };
+  setEditMode(true);
+  setEditId(producto.idproducto);
+  setNewProducto({
+    codProducto: producto.codproducto,
+    nombreProducto: producto.nombreproducto,
+    tipoProducto: producto.tipoproducto,
+    descripcionProducto: producto.descripcionproducto,
+    precioVentaProducto: producto.precioventaproducto,
+    directivaCostoFijoProducto: producto.directivacostofijoproducto,
+    directivaCostoVariableProducto: producto.directivacostovariableproducto,
+    directivaGananciaProducto: producto.directivagananciaproducto,
+    imagenFile: null, // ← se carga nueva si se selecciona
+    imagenproducto: producto.imagenproducto || '', // ✅ agregar URL actual
+  });
+};
+
 
     const handleDelete = async (id) => {
         try {
@@ -178,6 +200,13 @@ await createProducto(payload);
         step="0.01"
         min="0"
     />
+    <label>Imagen del producto</label>
+        <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => setNewProducto({ ...newProducto, imagenFile: e.target.files[0] })}
+        />
+
 
     <button type="submit" className="materias-primas-button">{editMode ? 'Actualizar' : 'Guardar'}</button>
 </form>
